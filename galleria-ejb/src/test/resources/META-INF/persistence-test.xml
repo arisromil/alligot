@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="galleria-ejb" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>info.galleria.domain.Album</class>
+		<class>info.galleria.domain.Group</class>
+		<class>info.galleria.domain.Photo</class>
+		<class>info.galleria.domain.User</class>
+		<properties>
+			<property name="javax.persistence.jdbc.url" value="${galleria.derby.testInstance.jdbcUrl}"/>
+			<property name="javax.persistence.jdbc.user" value="${galleria.derby.testInstance.user}"/>
+			<property name="javax.persistence.jdbc.password" value="${galleria.derby.testInstance.password}"/>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="javax.persistence.validation.group.pre-persist" value="info.galleria.domain.PersistenceConstraint"/>
+			<property name="javax.persistence.validation.group.pre-update" value="info.galleria.domain.PersistenceConstraint"/>
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,0 +1,30 @@
+
+syntax: regexp
+^target$
+syntax: regexp
+^galleria-ear/target$
+syntax: regexp
+^galleria-ejb/target$
+syntax: regexp
+^galleria-jsf/target$
+syntax: regexp
+^galleria-ear/.settings$
+syntax: regexp
+^galleria-ejb/.settings$
+syntax: regexp
+^galleria-jsf/.settings$
+syntax: regexp
+^.settings$
+syntax: regexp
+^galleria-ejb/glassfish-integrationtest-install/glassfish/lib$
+syntax: regexp
+^galleria-ejb/glassfish-integrationtest-install/glassfish/META-INF$
+syntax: regexp
+^galleria-ejb/glassfish-integrationtest-install/glassfish/*\.rar$
+syntax: regexp
+\.rar$
+syntax: regexp
+^ccLiveOutput*$
+syntax: glob
+.classpath
+.project

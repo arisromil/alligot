@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="galleria-ejb" transaction-type="JTA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>jdbc/galleriaDS</jta-data-source>
+		<class>info.galleria.domain.User</class>
+		<class>info.galleria.domain.Group</class>
+		<class>info.galleria.domain.Album</class>
+		<class>info.galleria.domain.Photo</class>
+		<properties>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="javax.persistence.validation.group.pre-persist" value="info.galleria.domain.PersistenceConstraint"/>
+			<property name="javax.persistence.validation.group.pre-update" value="info.galleria.domain.PersistenceConstraint"/>
+		</properties>
+	</persistence-unit>
+</persistence>

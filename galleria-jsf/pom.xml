@@ -1,0 +1,299 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>info.galleria</artifactId>
+		<groupId>name.reynolds.vineet</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>galleria-jsf</artifactId>
+	<packaging>war</packaging>
+	<description>The web module containing JSF facelets and managed beans.</description>
+	<properties>
+		<arquillian.version>1.0.0.CR7</arquillian.version>
+		<arquillian.glassfish-remote.version>1.0.0.CR3</arquillian.glassfish-remote.version>
+		<arquillian.drone.version>1.0.0.CR3</arquillian.drone.version>
+		<arquillian.jacoco.version>1.0.0.Alpha1</arquillian.jacoco.version>
+		<selenium.version>2.15.0</selenium.version>
+		<jacoco.version>0.5.3.201107060350</jacoco.version>
+		<jacoco.file.path>${project.build.directory}/jacoco.exec</jacoco.file.path>
+		<sonar.jacoco.itReportPath>${project.build.directory}/jacoco.exec</sonar.jacoco.itReportPath>
+		<sonar.phase>integration-test</sonar.phase>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>name.reynolds.vineet</groupId>
+			<artifactId>galleria-ejb</artifactId>
+			<type>jar</type>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.6</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.5.6</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>3.0.M2</version>
+		</dependency>
+		<dependency>
+			<!-- For use with the PrimeFaces file upload component -->
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<!-- For use with the PrimeFaces file upload component -->
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.2.1</version>
+		</dependency>
+		<!-- Dependencies for Arquillian. Version is from Arquillian BOM -->
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Add dependencies to shrinkwrap-resolver APIs from the Arquillian BOM. 
+			Version is declared in BOM. -->
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-api-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencies for Glassfish support in Arquillian -->
+		<dependency>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-glassfish-remote-3.1</artifactId>
+			<version>${arquillian.glassfish-remote.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<!-- Used to prevent java.lang.ClassFormatError: "Absent Code attribute 
+				in method that is not native or abstract in class file javax/mail/internet/ParseException" 
+				arising out of usage of javaee-6.0-api -->
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+		<!-- Arquillian Drone dependency. Starting with 1.0.0.CR1, the drone-impl 
+			and drone-webdriver dependencies are being imported as stated in the migration 
+			notes. -->
+		<dependency>
+		   <groupId>org.jboss.arquillian.extension</groupId>
+		   <artifactId>arquillian-drone-impl</artifactId>
+		   <version>${arquillian.drone.version}</version>
+		   <scope>test</scope>
+		</dependency>
+		<dependency>
+		   <groupId>org.jboss.arquillian.extension</groupId>
+		   <artifactId>arquillian-drone-webdriver</artifactId>
+		   <version>${arquillian.drone.version}</version>
+		   <scope>test</scope>
+		</dependency>
+		<!-- Selenium 2.5.0 to support Firefox 6.0 -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>servlet-api-2.5</artifactId>
+					<groupId>org.mortbay.jetty</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Dependencies for DbUnit --> 
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.4.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbyclient</artifactId>
+			<version>10.8.1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencies for code coverage in Arquillian using JaCoCo -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>org.jacoco.core</artifactId>
+			<version>${jacoco.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.5.6</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	<build>		
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*IntegrationSuite.java</exclude>
+						<exclude>**/*IntegrationTest.java</exclude>
+						<exclude>**/*ITCase.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<includes>
+						<!-- Used to include IntegrationSuite and ITCase classes during integration testing; 
+							avoiding the use of the default naming convention. Includes only suite classes 
+							for now as the startup of the embedded Glassfish container is CPU and disk 
+							intensive. -->
+						<include>**/*IntegrationSuite.java</include>
+						<include>**/*IntegrationTest.java</include>
+						<include>**/*ITCase.java</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<repositories>
+		<repository>
+			<id>prime-repo</id>
+			<name>Prime Technology Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Maven Repository Group</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jboss-releases-repository-group</id>
+			<name>JBoss Releases Maven Repository Group</name>
+			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+	<profiles>
+		<profile>
+			<!-- Use a separate profile for starting and stopping Glassfish as the start-glassfish 
+				and stop-glassfish goals should not be run when tests are skipped. -->
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.glassfish.maven.plugin</groupId>
+						<artifactId>maven-glassfish-plugin</artifactId>
+						<version>2.1</version>
+						<configuration>
+							<user>${galleria.glassfish.testDomain.user}</user>
+							<passwordFile>${galleria.glassfish.testDomain.passwordFile}</passwordFile>
+							<glassfishDirectory>${galleria.glassfish.testDomain.glassfishDirectory}</glassfishDirectory>
+							<domain>
+								<name>${galleria.glassfish.testDomain.domainName}</name>
+								<adminPort>${galleria.glassfish.testDomain.adminPort}</adminPort>
+								<httpPort>${galleria.glassfish.testDomain.httpPort}</httpPort>
+								<httpsPort>${galleria.glassfish.testDomain.httpsPort}</httpsPort>
+							</domain>
+							<debug>true</debug>
+							<echo>true</echo>
+							<terse>false</terse>
+							<autoCreate>false</autoCreate>
+						</configuration>
+						<executions>
+							<execution>
+								<id>start-glassfish</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>start-domain</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>stop-glassfish</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop-domain</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<dependencyManagement>
+		<dependencies>
+			<!-- Dependencies for Arquillian -->
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${arquillian.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

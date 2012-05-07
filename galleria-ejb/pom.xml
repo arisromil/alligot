@@ -1,0 +1,417 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>info.galleria</artifactId>
+		<groupId>name.reynolds.vineet</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>galleria-ejb</artifactId>
+	<packaging>ejb</packaging>
+	<description>The EJB module containing Session EJBs and JPA entities.</description>
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.5.6</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.5.6</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.3.0</version>
+			<scope>test</scope>
+		</dependency> -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.6.5.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>nl.jqno.equalsverifier</groupId>
+			<artifactId>equalsverifier</artifactId>
+			<version>1.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbyclient</artifactId>
+			<version>10.8.1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+			<version>3.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencies for DbUnit --> 
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.4.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-ejb-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<!-- Used to set the facet version of the EJB project to 3.1 in Eclipse. 
+						Works against m2e 1.0 -->
+					<ejbVersion>3.1</ejbVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
+				<configuration>
+					<includes>
+						<!-- Used to include JUnit 4 Test Suites in the unit-testing phase -->
+						<include>**/*Suite.java</include>
+						<!-- Used to include test classes in the unit-testing phase -->
+						<include>**/*Test.java</include>
+						<include>**/*TestCase.java</include>
+					</includes>
+					<excludes>
+						<!-- Used to ignore IntegrationTest classes in the unit-testing phase -->
+						<exclude>**/*IntegrationSuite.java</exclude>
+						<exclude>**/*IntegrationTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-test-persistence</id>
+						<phase>process-test-resources</phase>
+						<configuration>
+							<tasks>
+								<!--backup the "proper" persistence.xml -->
+								<copy
+									file="${project.build.outputDirectory}/META-INF/persistence.xml"
+									tofile="${project.build.outputDirectory}/META-INF/persistence.xml.proper" overwrite="true" />
+								<!--replace the "proper" persistence.xml with the "test" version -->
+								<copy
+									file="${project.build.testOutputDirectory}/META-INF/persistence-test.xml"
+									tofile="${project.build.outputDirectory}/META-INF/persistence.xml" overwrite="true" />
+								<!-- copy the "test" version also to the instrumented classes directory 
+									of Cobertura. This is for Sonar and for any future usage of Cobertura -->
+								<copy
+									file="${project.build.testOutputDirectory}/META-INF/persistence-test.xml"
+									tofile="${project.build.directory}/generated-classes/cobertura/META-INF/persistence.xml" overwrite="true" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>restore-persistence</id>
+						<phase>prepare-package</phase>
+						<configuration>
+							<tasks>
+								<!--restore the "proper" persistence.xml -->
+								<copy
+									file="${project.build.outputDirectory}/META-INF/persistence.xml.proper"
+									tofile="${project.build.outputDirectory}/META-INF/persistence.xml"
+									overwrite="true" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<includes>
+						<!-- Used to include IntegrationSuite classes during integration testing; 
+							avoiding the use of the default naming convention. Includes only suite classes 
+							for now as the startup of the embedded Glassfish container is CPU and disk 
+							intensive. -->
+						<include>**/*IntegrationSuite.java</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.dbdeploy</groupId>
+				<artifactId>maven-dbdeploy-plugin</artifactId>
+				<version>3.0M3</version>
+				<configuration>
+					<scriptdirectory>${basedir}/src/main/sql</scriptdirectory>
+					<driver>org.apache.derby.jdbc.ClientDriver</driver>
+					<!--
+					Use an separate Derby instance for unit testing.
+					Ensure that the values here match with the ones used in persistence-test.xml. 
+					-->
+					<url>${galleria.derby.testInstance.jdbcUrl}</url>
+					<userid>${galleria.derby.testInstance.user}</userid>
+					<password>${galleria.derby.testInstance.password}</password>
+					<delimiter>;</delimiter>
+					<delimiterType>normal</delimiterType>
+				</configuration>
+				<executions>
+					<execution>
+						<id>update-database</id>
+						<goals>
+							<goal>update</goal>
+						</goals>
+						<phase>process-test-resources</phase>
+					</execution>
+					<execution>
+						<id>update-IT-database</id>
+						<goals>
+							<goal>update</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.derby</groupId>
+						<artifactId>derbyclient</artifactId>
+						<version>10.8.1.2</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-antrun-plugin</artifactId>
+										<versionRange>[1.3,)</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.dbdeploy</groupId>
+										<artifactId>
+											maven-dbdeploy-plugin
+										</artifactId>
+										<versionRange>
+											[3.0M3,)
+										</versionRange>
+										<goals>
+											<goal>update</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<repositories>
+		<repository>
+			<id>EclipseLink Repo</id>
+			<!-- note that ampersands in this URL are escaped because this is in an 
+				xml file - un-escape them to use in browser -->
+			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
+		</repository>
+		<repository>
+			<id>equalsverifier-repository</id>
+			<url>http://equalsverifier.googlecode.com/svn/maven/</url>
+		</repository>
+		<repository>
+			<id>download.java.net - Glassfish</id>
+			<url>http://download.java.net/maven/glassfish/</url>
+		</repository>
+		<repository>
+			<id>download.java.net</id>
+			<name>Java.net Maven Repository</name>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+	</repositories>
+	<profiles>
+		<profile>
+			<!-- Used to add the jacoco agent to the surefire and failsafe JVM commandline 
+				only for gathering data for Sonar. -->
+			<id>sonar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.7.1</version>
+						<configuration>
+							<includes>
+								<!-- Used to include JUnit 4 Test Suites in the unit-testing phase -->
+								<include>**/*Suite.java</include>
+								<!-- Used to include test classes in the unit-testing phase -->
+								<include>**/*Test.java</include>
+								<include>**/*TestCase.java</include>
+							</includes>
+							<excludes>
+								<!-- Used to ignore IntegrationTest classes in the unit-testing phase -->
+								<exclude>**/*IntegrationSuite.java</exclude>
+								<exclude>**/*IntegrationTest.java</exclude>
+							</excludes>
+							<argLine>-javaagent:${jacoco.agent.path}=destfile="${jacoco.file.path}"</argLine>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.9</version>
+						<configuration>
+							<includes>
+								<!-- Used to include IntegrationSuite classes during integration testing; 
+									avoiding the use of the default naming convention. Includes only suite classes 
+									for now as the startup of the embedded Glassfish container is CPU and disk 
+									intensive. -->
+								<include>**/*IntegrationSuite.java</include>
+							</includes>
+							<argLine>-javaagent:${jacoco.agent.path}=destfile="${jacoco.file.path}"</argLine>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- Used to update the production instance with any changes detected by 
+				dbdeploy. This profile is to be used by a build script to push database deltas 
+				into production. -->
+			<id>production</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.dbdeploy</groupId>
+						<artifactId>maven-dbdeploy-plugin</artifactId>
+						<version>3.0M3</version>
+						<configuration>
+							<scriptdirectory>${basedir}/src/main/sql</scriptdirectory>
+							<driver>org.apache.derby.jdbc.ClientDriver40</driver>
+							<!-- Use a separate Derby instance for production deployments -->
+							<url>${galleria.derby.productionInstance.jdbcUrl}</url>
+							<userid>${galleria.derby.productionInstance.user}</userid>
+							<password>${galleria.derby.productionInstance.password}</password>
+							<delimiter>;</delimiter>
+							<delimiterType>normal</delimiterType>
+						</configuration>
+						<executions>
+							<execution>
+								<id>update-database</id>
+								<goals>
+									<goal>update</goal>
+								</goals>
+								<phase>install</phase>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.derby</groupId>
+								<artifactId>derbyclient</artifactId>
+								<version>10.8.1.2</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+                <profile>
+<id>development</id>
+<activation>
+<activeByDefault>true</activeByDefault>
+</activation>
+<properties>
+<galleria.derby.testInstance.jdbcUrl>jdbc:derby://localhost:1527/GALLERIATEST</galleria.derby.testInstance.jdbcUrl>
+<galleria.derby.testInstance.user>APP</galleria.derby.testInstance.user>
+<galleria.derby.testInstance.password>APP</galleria.derby.testInstance.password>
+<galleria.glassfish.testDomain.user>admin</galleria.glassfish.testDomain.user>
+<galleria.glassfish.testDomain.passwordFile>C:/Program Files (x86)/glassfish-3.1.2/glassfish/domains/test-domain/config/local-password</galleria.glassfish.testDomain.passwordFile>
+<galleria.glassfish.testDomain.glassfishDirectory>C:/Program Files (x86)/glassfish-3.1.2/glassfish/</galleria.glassfish.testDomain.glassfishDirectory>
+<galleria.glassfish.testDomain.domainName>test-domain</galleria.glassfish.testDomain.domainName>
+<galleria.glassfish.testDomain.adminPort>10048</galleria.glassfish.testDomain.adminPort>
+<galleria.glassfish.testDomain.httpPort>10080</galleria.glassfish.testDomain.httpPort>
+<galleria.glassfish.testDomain.httpsPort>10081</galleria.glassfish.testDomain.httpsPort>
+</properties>
+</profile>
+	</profiles>
+	<properties>
+		<jacoco.file.path>${project.build.directory}/jacoco.exec</jacoco.file.path>
+		<sonar.jacoco.itReportPath>${project.build.directory}/jacoco.exec</sonar.jacoco.itReportPath>
+		<sonar.phase>verify</sonar.phase>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+	</properties>
+</project>
