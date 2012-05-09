@@ -9,6 +9,7 @@ import javax.faces.bean.*;
 import javax.faces.context.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.*;
 
@@ -49,6 +50,21 @@ public class Authenticator
 	{
 		String result = null;
 		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+                
+                // Session Fixation Prevention
+               HttpSession session = (HttpSession) externalContext.getSession(false);
+
+               if (logger.isDebugEnabled()) {
+                 logger.debug("Session before authentication request: " + session.getId());
+               }
+
+               session.invalidate();
+               session = (HttpSession) externalContext.getSession(true);
+
+               if (logger.isDebugEnabled()) {
+                 logger.debug("Session after authentication request: " + session.getId());
+               }
+                
 		HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 		try
 		{
