@@ -1,10 +1,11 @@
 package info.galleria.domain;
 
+import name.verifier.bean.VerifierHelper;
+import name.verifier.bean.BeanVerifier;
 import java.beans.PropertyDescriptor;
 import java.util.Collection;
 
-import name.reynolds.vineet.verifier.bean.*;
-import name.reynolds.vineet.verifier.factory.ITypeFactory;
+import name.verifier.factory.ITypeFactory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

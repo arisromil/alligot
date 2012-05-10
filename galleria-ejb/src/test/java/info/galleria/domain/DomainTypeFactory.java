@@ -1,6 +1,6 @@
 package info.galleria.domain;
 
-import name.reynolds.vineet.verifier.factory.ITypeFactory;
+import name.verifier.factory.ITypeFactory;
 
 public class DomainTypeFactory implements ITypeFactory
 {

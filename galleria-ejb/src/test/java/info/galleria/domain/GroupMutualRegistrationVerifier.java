@@ -1,12 +1,13 @@
 package info.galleria.domain;
 
-import static name.reynolds.vineet.verifier.registration.context.RelationType.MANY_TO_MANY;
+import name.verifier.registration.VerifierHelper;
+import name.verifier.registration.MutualRegistrationVerifier;
+import static name.verifier.registration.context.RelationType.MANY_TO_MANY;
 
 import java.util.Collection;
 
-import name.reynolds.vineet.verifier.factory.ITypeFactory;
-import name.reynolds.vineet.verifier.registration.*;
-import name.reynolds.vineet.verifier.registration.context.TestContext;
+import name.verifier.factory.ITypeFactory;
+import name.verifier.registration.context.TestContext;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
