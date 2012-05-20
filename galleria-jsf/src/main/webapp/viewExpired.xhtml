@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./templates/defaultLayout.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                >
+    <ui:define name="title">
+        <h:outputText value="#{msg['Exception.page.title']}" />
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <h:outputText value="#{msg['Exception.page.message']}" />
+            <p>You were on page #{currentViewId}.  Maybe that's useful.</p>
+            <p>Please re-login via the <h:outputLink styleClass="homepagelink" value="#{request.contextPath}/Index.xhtml" ><h:outputText value="Homepage" /></h:outputLink>.</p>
+        </h:form>
+    </ui:define>
+</ui:composition>

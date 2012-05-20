@@ -76,4 +76,8 @@
 		<auth-method>FORM</auth-method>
 		<realm-name>GalleriaRealm</realm-name>
 	</login-config>
+        <error-page>
+            <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+            <location>/viewExpired.xhtml</location>
+        </error-page>
 </web-app>
