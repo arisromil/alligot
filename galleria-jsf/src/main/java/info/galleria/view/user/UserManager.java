@@ -79,14 +79,6 @@ public class UserManager
 			logger.error(Messages.getLoggerString("Signup.AccountCreationFailureMessage"), userEx);
 			populateErrorMessage(userEx);
 		}
-		catch (EJBException ejbEx)
-		{
-			String key = "Signup.InternalFailureMessage";
-			logger.error(Messages.getLoggerString(key), ejbEx);
-			String message = Messages.getString(key, locale);
-			FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
-			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		}
 		return result;
 	}
 
@@ -107,14 +99,6 @@ public class UserManager
 		{
 			logger.error(Messages.getLoggerString("Signup.AccountCreationFailureMessage"), modifyEx);
 			populateErrorMessage(modifyEx);
-		}
-		catch (EJBException ejbEx)
-		{
-			String key = "AccountPreferences.InternalModifyErrorMessage";
-			logger.error(Messages.getLoggerString(key), ejbEx);
-			String message = Messages.getString(key, locale);
-			FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
-			context.addMessage(null, facesMessage);
 		}
 		return result;
 	}
@@ -139,14 +123,6 @@ public class UserManager
 		{
 			String key = "AccountPreferences.InternalDeleteErrorMessage";
 			logger.error(Messages.getLoggerString(key), userEx);
-			String message = Messages.getString(key, locale);
-			FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
-			context.addMessage(null, facesMessage);
-		}
-		catch (EJBException ejbEx)
-		{
-			String key = "AccountPreferences.InternalDeleteErrorMessage";
-			logger.error(Messages.getLoggerString(key), ejbEx);
 			String message = Messages.getString(key, locale);
 			FacesMessage facesMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null);
 			context.addMessage(null, facesMessage);

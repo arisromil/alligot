@@ -66,12 +66,6 @@ public class AlbumManager
 		{
 			populateErrorMessage(albumEx);
 		}
-		catch (EJBException ejbEx)
-		{
-			String messageKey = "CreateAlbum.InternalFailureMessage";
-			logger.error(Messages.getLoggerString(messageKey), ejbEx);
-			processContainerException(messageKey);
-		}
 		return result;
 	}
 
@@ -86,12 +80,6 @@ public class AlbumManager
 		{
 			logger.error("Failed to obtain the list of albums", albumEx);
 			populateErrorMessage(albumEx);
-		}
-		catch (EJBException ejbEx)
-		{
-			logger.error("Unpredicted error occurred.", ejbEx);
-			String messageKey = "FindAllAlbums.InternalErrorMessage";
-			processContainerException(messageKey);
 		}
 		return;
 	}
@@ -108,12 +96,6 @@ public class AlbumManager
 		{
 			logger.error("Failed to delete the album.", albumEx);
 			populateErrorMessage(albumEx);
-		}
-		catch (EJBException ejbEx)
-		{
-			logger.error("Failed to delete the album.", ejbEx);
-			String messageKey = "DeleteAlbum.InternalErrorMessage";
-			processContainerException(messageKey);
 		}
 		return "/private/HomePage.xhtml?faces-redirect=true";
 	}
@@ -134,12 +116,6 @@ public class AlbumManager
 		{
 			logger.error("Failed to modify the album.", albumEx);
 			populateErrorMessage(albumEx);
-		}
-		catch (EJBException ejbEx)
-		{
-			logger.error("Failed to modify the album.", ejbEx);
-			String messageKey = "ModifyAlbum.InternalErrorMessage";
-			processContainerException(messageKey);
 		}
 		return result;
 	}
@@ -227,13 +203,6 @@ public class AlbumManager
 		{
 			logger.error("Failed to retrieve album.", albumEx);
 			populateErrorMessage(albumEx);
-			redirectToMainPage();
-		}
-		catch (EJBException ejbEx)
-		{
-			logger.error("Failed to retrieve photos.", ejbEx);
-			String messageKey = "FindAlbumByAlbumId.InternalErrorMessage";
-			processContainerException(messageKey);
 			redirectToMainPage();
 		}
 	}

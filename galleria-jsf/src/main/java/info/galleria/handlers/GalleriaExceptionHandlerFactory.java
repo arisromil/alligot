@@ -1,3 +1,5 @@
+package info.galleria.handlers;
+
 import info.galleria.handlers.GalleriaExceptionHandler;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;

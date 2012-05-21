@@ -103,12 +103,6 @@ public class PhotoManager
 			logger.error("Failed to upload the photo", photoEx);
 			populateErrorMessage(photoEx);
 		}
-		catch (EJBException ejbEx)
-		{
-			logger.error("An unexpected error was encountered when uploading the photo", ejbEx);
-			String messageKey = "UploadPhoto.InternalErrorMessage";
-			processContainerException(messageKey);
-		}
 		return result;
 	}
 
@@ -145,12 +139,6 @@ public class PhotoManager
 		{
 			logger.error("Failed to modify the photo.", albumEx);
 			populateErrorMessage(albumEx);
-		}
-		catch (EJBException ejbEx)
-		{
-			logger.error("Failed to modify the photo.", ejbEx);
-			String messageKey = "ModifyPhoto.InternalErrorMessage";
-			processContainerException(messageKey);
 		}
 		return "/private/photo/ViewPhoto.xhtml?faces-redirect=true&amp;photoId=" + photoId;
 	}
@@ -240,11 +228,6 @@ public class PhotoManager
 		catch (PhotoException photoEx)
 		{
 			populateErrorMessage(photoEx);
-		}
-		catch (EJBException ejbEx)
-		{
-			String messageKey = "FindPhotoById.InternalErrorMessage";
-			processContainerException(messageKey);
 		}
 	}
 
