@@ -1,0 +1,1 @@
+Using Vineet Reynold's JEE6 Galleria example, refurbished to be a personal belongings inventory app.
