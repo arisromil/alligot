@@ -83,10 +83,11 @@ public class PhotoManager
 				byte[] fileBytes = file.getContents();
 				String photoTitle = uploadRequest.getTitle();
 				String photoDescription = uploadRequest.getDescription();
+                                Double photoPrice = uploadRequest.getPrice();
 
 				logger.info("Processed uploaded file {} of size {} for album {}", new Object[] { fileName,
 						fileBytes.length, selectedAlbum });
-				Photo photo = new Photo(fileName, fileBytes, photoTitle, photoDescription);
+				Photo photo = new Photo(fileName, fileBytes, photoTitle, photoDescription, photoPrice);
 				photoService.uploadPhoto(photo, selectedAlbum);
 				String messageKey = "UploadPhoto.PhotoUploadSuccessMessage";
 				buildMessageForDisplay(messageKey, FacesMessage.SEVERITY_INFO);
@@ -131,6 +132,7 @@ public class PhotoManager
 		{
 			photo.setTitle(editRequest.getTitle());
 			photo.setDescription(editRequest.getDescription());
+                        photo.setPrice(editRequest.getPrice());
 			photoService.modifyPhoto(photo);
 			String messageKey = "EditPhoto.PhotoModificationSuccessMessage";
 			buildMessageForDisplay(messageKey, FacesMessage.SEVERITY_INFO);

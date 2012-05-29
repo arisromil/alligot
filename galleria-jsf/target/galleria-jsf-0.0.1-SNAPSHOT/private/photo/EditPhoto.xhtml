@@ -21,6 +21,11 @@
 			    		<h:outputLabel value="#{msg['EditPhoto.photoDescription.label']}" for="photoDescription" />
 			    		<h:inputTextarea id="photoDescription" value="#{photoManager.editRequest.description}" />
 			    	</li>
+       			    	<li>
+			    		<h:outputLabel value="#{msg['EditPhoto.photoPrice.label']}" for="photoPrice" />
+			    		<h:inputTextarea id="photoPrice" value="#{photoManager.editRequest.price}" />
+			    	</li>
+
 			    	<li>
 			    		<h:commandButton id="editPhotoButton" action="#{photoManager.editPhoto}" value="#{msg['EditPhoto.editPhotoButton.label']}" styleClass="submit" />
 			    		<h:outputLink id="viewPhoto" value="ViewPhoto.xhtml?photoId=#{photoManager.photoId}">

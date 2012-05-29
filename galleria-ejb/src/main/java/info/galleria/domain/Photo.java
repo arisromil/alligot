@@ -78,6 +78,29 @@ public class Photo implements Serializable
 
 	// }}
 
+        @Column(name="price")
+        private Double price;
+
+      	/**
+	 * Returns the photo's price.
+	 * 
+	 * @return The price
+	 */
+        public Double getPrice() {
+              return this.price;
+        }
+
+        /**
+	 * Sets the price of the photo.
+	 * 
+	 * @param price
+	 *            The price
+	 */
+        public void setPrice(Double price) {
+              this.price = price;
+        }
+        
+        
 	// {{ file
 	@Lob()
 	@Basic(fetch = FetchType.LAZY)
@@ -320,6 +343,16 @@ public class Photo implements Serializable
 		this.title = title;
 		this.description = description;
 	}
+        
+        
+      	public Photo(String fileName, byte[] file, String title, String description, Double price)
+	{
+		this(fileName, file);
+		this.title = title;
+		this.description = description;
+                this.price = price;
+	}
+
 
 	@Override
 	public final int hashCode()

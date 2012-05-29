@@ -73,6 +73,7 @@ public class PhotoServiceImpl implements PhotoService
 		{
 			foundPhoto.setTitle(photo.getTitle());
 			foundPhoto.setDescription(photo.getDescription());
+                        foundPhoto.setPrice(photo.getPrice());
 			Photo modifiedPhoto = photoRepository.modify(foundPhoto);
 			return modifiedPhoto;
 		}

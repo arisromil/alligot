@@ -26,6 +26,11 @@
 						<h:inputTextarea id="photoDescription" value="#{photoManager.uploadRequest.description}" />
 					</li>
 					<li>
+						<h:outputLabel value="#{msg['UploadPhoto.photoPrice.label']}" for="photoPrice" />
+						<h:inputTextarea id="photoPrice" value="#{photoManager.uploadRequest.price}" />
+					</li>
+                                    
+					<li>
 						<h:outputLabel value="#{msg['UploadPhoto.chooseFile.label']}" for="photoUploader" />
 						<p:fileUpload id="photoUploader" mode="simple" multiple="false" value="#{photoManager.uploadRequest.file}" styleClass="file" />
 					</li>

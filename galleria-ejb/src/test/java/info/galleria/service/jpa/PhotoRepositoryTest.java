@@ -74,6 +74,7 @@ public class PhotoRepositoryTest extends AbstractRepositoryTest
 		// Execute
 		String modifiedTitle = "New Title";
 		String modifiedDescription = "New Description";
+                Double modifiedPrice = 1.0;
 		createdPhoto.setTitle(modifiedTitle);
 		createdPhoto.setDescription(modifiedDescription);
 		Photo modifiedPhoto = repository.modify(createdPhoto);
@@ -86,6 +87,8 @@ public class PhotoRepositoryTest extends AbstractRepositoryTest
 		assertEquals(modifiedPhoto, foundPhoto);
 		assertEquals(modifiedTitle, foundPhoto.getTitle());
 		assertEquals(modifiedDescription, foundPhoto.getDescription());
+                assertEquals(modifiedPrice, foundPhoto.getPrice());
+                
 	}
 
 	@Test

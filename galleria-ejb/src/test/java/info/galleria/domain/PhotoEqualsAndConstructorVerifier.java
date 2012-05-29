@@ -12,6 +12,7 @@ public class PhotoEqualsAndConstructorVerifier
 	private static final byte[] TEST_FILECONTENT = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	private static final String TEST_FILE_TITLE = "TEST TITLE";
 	private static final String TEST_FILE_DESCRIPTION = "TEST_DESCRIPTION";
+        private static final Double TEST_PRICE = 7.0;
 
 	/**
 	 * Test method for {@link info.galleria.entities.User#hashCode()}.
@@ -37,13 +38,15 @@ public class PhotoEqualsAndConstructorVerifier
 	@Test
 	public void testFourArgConstructor() throws Exception
 	{
-		Photo photo = new Photo(TEST_FILENAME, TEST_FILECONTENT, TEST_FILE_TITLE, TEST_FILE_DESCRIPTION);
+		Photo photo = new Photo(TEST_FILENAME, TEST_FILECONTENT, TEST_FILE_TITLE, TEST_FILE_DESCRIPTION, TEST_PRICE);
 
 		assertNotNull(photo);
 		assertEquals(TEST_FILENAME, photo.getFileName());
 		assertEquals(TEST_FILECONTENT, photo.getFile());
 		assertEquals(TEST_FILE_TITLE, photo.getTitle());
 		assertEquals(TEST_FILE_DESCRIPTION, photo.getDescription());
+                assertEquals(TEST_PRICE, photo.getPrice());
+                
 	}
 
 }

@@ -5,6 +5,9 @@ import javax.validation.constraints.Size;
 public class EditPhotoRequest
 {
 
+    
+        private Double price;
+    
 	@Size(min = 0, max = 255, message = "{Photo.title.size}")
 	private String title;
 
@@ -31,4 +34,13 @@ public class EditPhotoRequest
 		this.description = description;
 	}
 
+        public Double getPrice() {
+                return price;
+        }
+
+        public void setPrice(Double price) {
+                this.price = price;
+        }
+
+        
 }

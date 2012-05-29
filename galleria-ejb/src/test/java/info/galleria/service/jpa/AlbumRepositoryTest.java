@@ -197,6 +197,7 @@ public class AlbumRepositoryTest extends AbstractRepositoryTest
 		// Execute
 		String modifiedTitle = "New Title";
 		String modifiedDescription = "New Description";
+                Double modifiedPrice = 1.0;
 
 		long photoId = 0;
 		for (Photo eachPhoto : createdAlbum.getPhotos())
@@ -220,6 +221,7 @@ public class AlbumRepositoryTest extends AbstractRepositoryTest
 		assertTrue(actualAlbum.getPhotos().contains(photo));
 		assertEquals(modifiedTitle, actualPhoto.getTitle());
 		assertEquals(modifiedDescription, actualPhoto.getDescription());
+                assertEquals(modifiedPrice, actualPhoto.getPrice());                
 		assertEquals(actualAlbum.getCoverPhoto(), actualPhoto);
 		assertEquals(photo, actualAlbum.getCoverPhoto());
 	}

@@ -9,6 +9,8 @@ public class UploadFileRequest
 	private long albumId;
 
 	private UploadedFile file;
+        
+        private Double price;
 
 	@Size(min = 0, max = 255, message = "{Photo.title.size}")
 	private String title;
@@ -56,4 +58,12 @@ public class UploadFileRequest
 		this.description = description;
 	}
 
+        public Double getPrice() {
+                return price;
+        }
+
+        public void setPrice(Double price) {
+                this.price = price;
+        }
+        
 }
