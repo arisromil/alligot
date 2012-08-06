@@ -5,6 +5,8 @@
 package info.galleria.domain;
 
 
+import java.util.List;
+import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
@@ -17,7 +19,18 @@ public class Status {
     @XmlElement(name="created_at") public String data;
     public String text;
     public User user;
+    public String id;
 
+
+
+    @XmlElement(name="entities") public List<TwitterEntity> twitterEntity;
+
+    public List<TwitterEntity> getTwitterEntity() {
+        return twitterEntity;
+    }
+
+    
+    
     public String getData() {
         return data;
     }
@@ -29,5 +42,11 @@ public class Status {
     public User getUser() {
         return user;
     }
+    
+    public String getId() {
+        return id;
+    }
+    
+    
     
 }

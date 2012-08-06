@@ -1,10 +1,14 @@
 package info.galleria.view.photo;
 
+
 import info.galleria.domain.*;
 import info.galleria.i18n.Messages;
 import info.galleria.service.ejb.*;
 import info.galleria.service.ejb.ApplicationException;
 import info.galleria.view.util.ExceptionProcessor;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 import java.util.*;
 
@@ -17,6 +21,9 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.model.UploadedFile;
 import org.slf4j.*;
+
+
+
 
 @ManagedBean
 @ViewScoped
@@ -40,7 +47,7 @@ public class PhotoManager
 	private long photoId;
 
 	private boolean isPhotoFetchAttempted;
-
+        
 	public PhotoManager()
 	{
 		this.uploadRequest = new UploadFileRequest();
@@ -60,6 +67,46 @@ public class PhotoManager
 			populateErrorMessage(albumEx);
 		}
 	}
+        
+        
+        public String getOnlinePhoto() throws MalformedURLException, IOException
+        {
+        String result = null;
+
+        
+		try
+		{
+			Album selectedAlbum = null;
+			for (Album album : albums)
+			{
+				if (album.getAlbumId() == uploadRequest.getAlbumId())
+				{
+					selectedAlbum = album;
+					break;
+				}
+			}
+
+			if (selectedAlbum != null)
+			{
+                                Photo photo = photoService.fetchOnlinePhoto();
+				photoService.uploadPhoto(photo, selectedAlbum);
+				String messageKey = "UploadPhoto.PhotoUploadSuccessMessage";
+				buildMessageForDisplay(messageKey, FacesMessage.SEVERITY_INFO);
+				result = "/private/album/ViewAlbum.xhtml?faces-redirect=true&amp;albumId=" + selectedAlbum.getAlbumId();
+			}
+			else
+			{
+				String messageKey = "UploadPhoto.InvalidAlbumMessage";
+				buildMessageForDisplay(messageKey, FacesMessage.SEVERITY_ERROR);
+			}
+		}
+		catch (PhotoException photoEx)
+		{
+			logger.error("Failed to upload the photo", photoEx);
+			populateErrorMessage(photoEx);
+		}
+		return result;     
+        }
 
 	public String uploadPhoto()
 	{

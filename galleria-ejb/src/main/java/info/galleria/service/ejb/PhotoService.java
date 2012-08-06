@@ -1,13 +1,17 @@
 package info.galleria.service.ejb;
 
-import info.galleria.domain.*;
-
+import info.galleria.domain.Album;
+import info.galleria.domain.Photo;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 public interface PhotoService
 {
 
 	public Photo uploadPhoto(Photo photo, Album album) throws PhotoException;
+        
+        public Photo fetchOnlinePhoto() throws PhotoException, MalformedURLException, IOException;
 
 	public Photo modifyPhoto(Photo photo) throws PhotoException;
 

@@ -1,10 +1,11 @@
 package info.galleria.domain;
 
 import java.io.Serializable;
-import java.util.*;
-
+import java.util.Arrays;
+import java.util.Date;
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * The persistent class for the PHOTOS database table.

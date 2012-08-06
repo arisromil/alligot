@@ -1,17 +1,33 @@
 package info.galleria.service.ejb;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import info.galleria.domain.*;
-import info.galleria.service.jpa.*;
+import info.galleria.service.jpa.AlbumRepository;
+import info.galleria.service.jpa.PhotoRepository;
+import info.galleria.service.jpa.UserRepository;
+import static info.galleria.utilities.Settings.ALLIGOT_HASHTAG;
+import static info.galleria.utilities.Settings.TIMELINE_URL;
+import static info.galleria.utilities.Settings.ZERO_PRICE;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Principal;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
-import javax.validation.*;
-
-import org.slf4j.*;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Stateless
 @EJB(name = "java:global/galleria/galleria-ejb/PhotoService", beanInterface = PhotoService.class)
@@ -36,6 +52,40 @@ public class PhotoServiceImpl implements PhotoService
 	@EJB
 	private PhotoRepository photoRepository;
 
+        
+	@Override
+	public Photo fetchOnlinePhoto() throws PhotoException, MalformedURLException, IOException
+	{
+                Photo photo = null;
+            
+                Client client = Client.create();
+                
+                StringBuilder restCall = new StringBuilder(TIMELINE_URL);
+                restCall.append(context.getCallerPrincipal().getName());
+                    
+                ClientResponse response = client.resource(restCall.toString()).get(ClientResponse.class);
+        
+                List<Status> statuses = response.getEntity(new GenericType<List<Status>>(){});   
+                for (Status st :  statuses) {
+                    for (TwitterEntity twitterEntity : st.getTwitterEntity()) {                        
+                        for (HashTag hashtag : twitterEntity.getHashtags()) {
+                                    if (ALLIGOT_HASHTAG.equalsIgnoreCase(hashtag.getTag().getText())) {
+                                        URL url = new URL(twitterEntity.getMedia().getCreativeStart().getMediaUrl());
+                                        File destination = new File(st.getId()+".jpg");
+                                        FileUtils.copyURLToFile(url, destination);
+                                        byte[] fileBytes = FileUtils.readFileToByteArray(destination);
+                                        photo = new Photo(st.getId(), fileBytes, st.getText(),st.getText(), ZERO_PRICE);
+                                    }
+                        }                                                 
+                    }
+                }
+            
+                
+                
+            return photo;
+        }
+        
+        
 	@Override
 	public Photo uploadPhoto(Photo photo, Album album) throws PhotoException
 	{
